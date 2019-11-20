@@ -92,7 +92,7 @@
 		data() {
 			return {
 				id: guidEmpty,
-				isloading: false,
+				isLoading: false,
 				model: {}
 			};
 		}

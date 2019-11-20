@@ -32,7 +32,6 @@
 					<text>退回修改</text>
 				</view>
 			</view>
-
 		</form>
 	</view>
 </template>
@@ -49,7 +48,6 @@
 		onLoad(opt) {
 			this.id = opt.id;
 			this.getData(this.id);
-			//console.log(this.id);
 		},
 		methods: {
 			submit(opinion) {
@@ -60,18 +58,15 @@
 						GuideTeacherOpinion: opinion
 					}, msg => {
 						if (msg.success) {
-							console.log(msg);
 							uni.showToast({
 								title: '通过成功'
 							});
 							setTimeout(function() {
-								uni.navigateBack({
-
-								});
+								uni.navigateBack({});
 								uni.hideToast();
 							}, 1500);
 						}
-					});
+					})
 				} else if (opinion == '修改') {
 					let id = this.id;
 					uni.showModal({
@@ -87,16 +82,14 @@
 											title: '修改成功'
 										})
 										setTimeout(function() {
-											uni.navigateBack({
-
-											});
+											uni.navigateBack({});
 											uni.hideToast();
 										}, 1500);
 									}
 								});
 							}
 						}
-					});
+					})
 				}
 			},
 			getData(id) {
@@ -111,8 +104,7 @@
 			},
 			TimeCombine() {
 				this.time = this.model.StartDate + " — " + this.model.EndDate;
-			}
-
+			},
 		}
 	}
 </script>
