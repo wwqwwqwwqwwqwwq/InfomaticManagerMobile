@@ -6,7 +6,7 @@
 			if (app.userInfo.isLogined) {
 				let ps = app.userInfo.permissons;
 				app.checkPermission = (p) => {
-					return ps && ps.indexOf(p) >= 0;
+					return (ps && ps.indexOf(p)) >= 0;
 				}
 				// this.loginSuccess(app.userInfo.currentUserGuid);
 				uni.navigateTo({
@@ -119,6 +119,11 @@
 					name: 'white',
 					color: '#ffffff'
 				},
+				{
+					title: '学院棕',
+					name: 'informatic-brown',
+					color: '#6d3b5e'
+				}
 			]
 		},
 	}

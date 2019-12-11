@@ -1,7 +1,6 @@
-<!--邵良颖于2019年10月14日编辑 用于查看实验室申请流程-->
 <template>
 	<view id="lab-apply-detail">
-		<cu-custom bgColor="bg-gradual-blue" isBack="">
+		<cu-custom bgColor="bg-informatic-brown" isBack>
 			<block slot="backText">返回</block>
 			<block slot="content">实验室申请表</block>
 		</cu-custom>
@@ -51,38 +50,14 @@
 				<input :value="model.HandleTime" disabled />
 			</view-->
 		</view>
-		<view v-show="state === 'timeline'" class="margin-top">
-			<view class="cu-timeline" v-for="(item, index) in timeline" :key="index">
-				<view class="cu-time">{{item.key}}</view>
-				<!--某流程具体执行情况-->
-				<view class="cu-item" :class="'text-'+stepColor[v.State]" v-for="(v,k) in item.steps" :key="k">
-					<view class="content">
-						<view class="cu-capsule radius">
-							<view class="cu-tag" :class="'bg-' + stepColor[v.State]">{{ v.ExecutorName }}{{ stepInfo[v.State]}}</view>
-							<view class="cu-tag" :class="'line-'+stepColor[v.State]">{{v.Time}}</view>
-						</view>
-						<view class="margin-top">{{v.stepName}}</view>
-					</view>
-					<view class="text-grey text-sm margin-top">
-						<template v-if="inStep([0, 1], v.State)">
-							{{ v.executorName ? `${v.ExecutorName} 正在进行中` : "正在等待接手" }}
-						</template>
-						<template v-else-if="inStep([2, 3], v.State)">
-							由{{ v.operator }}于{{ v.createdOn }}完成
-						</template>
-						<template v-else>
-							由{{ v.operator }}于{{ v.createdOn }}取消
-						</template>
-					</view>
-				</view>
-			</view>
+		<view v-show="state === 'timeline'" class="margin-tb">
+			<labTimeLine :timeline="timeline" />
 		</view>
 	</view>
 </template>
 
 <script>
 	let guidEmpty = '00000000-0000-0000-0000-000000000000';
-	let enums = require("../enumsv1.js");
 	let app = require("@/config");
 	export default {
 		onLoad(opt) {
@@ -114,10 +89,6 @@
 				uni.navigateTo({
 					url: this.currentStep.ToAction
 				})
-			},
-			inStep(steps, state) {
-				let s = state || this.model.State;
-				return steps.indexOf(s) > -1;
 			}
 		},
 		data() {
@@ -129,8 +100,6 @@
 				model: {},
 				timeline: [],
 				currentStep: {},
-				stepInfo: enums.stepInfo,
-				stepColor: ['blue', 'blue', 'green', 'green', 'red'],
 				state: "detail"
 			};
 		}

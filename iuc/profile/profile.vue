@@ -11,7 +11,7 @@
 			</p>
 		</view>
 		<view class="info">
-			<image v-bind:src="avatar" v-on:click="NavToInfor()" />
+			<image v-bind:src="avatar" v-on:click="navToInfor()" />
 			<p class="info_name">
 				<span style="font-size: 40upx;">{{realName}}</span>
 			</p>
@@ -30,9 +30,9 @@
 				<i class="cuIcon-write icon-write icon_comment"></i>
 				<p>所有申请</p>
 			</navigator>
-			<navigator>
+			<navigator url="../roomApplication/v1/create">
 				<i class="cuIcon-search icon_comment icon-search"></i>
-				<p>我的机位</p>
+				<p>申请实验室</p>
 			</navigator>
 		</view>
 
@@ -45,7 +45,12 @@
 				<span>我的申请流程</span>
 				<i class="cuIcon-right"></i>
 			</navigator>
+			<navigator url="../index/testEntry">
+				<span>测试入口</span>
+				<i class="cuIcon-right"></i>
+			</navigator>
 		</view>
+		<navTab :selection='3' />
 	</view>
 </template>
 
@@ -57,7 +62,6 @@
 				realName: "",
 				avatar: "",
 				currentUserGuid: "",
-
 			}
 		},
 		onLoad() {

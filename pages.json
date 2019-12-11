@@ -2,11 +2,23 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "iuc/index/index",
+			"style": {}
+		},
+		{
+			"path": "iuc/index/testEntry",
+			"style": {}
+		},
+		{
 			"path": "uc/login/login",
 			"style": {}
 		},
 		{
-			"path": "iuc/index/index",
+			"path":"iuc/roomApplication/v2/flowsCtrl",
+			"style": {}
+		},
+		{
+			"path":"iuc/roomApplication/v2/todoList",
 			"style": {}
 		},
 		{
@@ -70,6 +82,14 @@
 			"style": {}
 		},
 		{
+			"path":"iuc/roomApplication/v1/myList",
+			"style": {}
+		},
+		{
+			"path":"iuc/roomApplication/v1/myInvolve",
+			"style": {}
+		},
+		{
 			"path":"iuc/profile/profile",
 			"style": {}
 		},
@@ -82,6 +102,14 @@
 			"style": {}
 		},
 		{
+			"path":"iuc/News/newsList",
+			"style": {}
+		},
+		{
+			"path":"iuc/News/newsDetail",
+			"style": {}
+		},
+		{
 			"path":"iuc/userInfo/modifyGrade",
 			"style": {}
 		},
@@ -89,7 +117,15 @@
 			"path":"iuc/userInfo/modifyMobile",
 			"style": {}
 		}
-	],
+	    ,{
+            "path" : "iuc/index/index",
+            "style" : {}
+        }
+        ,{
+            "path" : "components/labComponent/labTimeLine",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"mp-alipay": {
 			/* 支付宝小程序特有相关 */

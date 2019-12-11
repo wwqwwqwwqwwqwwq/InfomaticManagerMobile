@@ -1,28 +1,16 @@
 <template>
 	<view id="room-detail">
-		<cu-custom bgColor="bg-gradual-blue" isBack="">
+		<cu-custom bgColor="bg-informatic-brown" isBack>
 			<block slot="backText">返回</block>
 			<block slot="content">实验室详细信息</block>
 		</cu-custom>
-		<view class="shadow shadow-lg bg-cyan radius margin-sm">
-			<view class="flex padding-lr padding-tb-xs solid-bottom justify-between align-center">
-				<view class="cu-avatar bg-cyan lg round" :style="{ backgroundImage: `url('${icon}')` }"></view>
-				<view class="text-xl text-white">{{`${labInfo.Building.SubCampus} ${labInfo.Building.Name}`}}</view>
-			</view>
-			<view class="text-sl text-white flex justify-center padding-sm">
-				{{labInfo.Name}}
-			</view>
-			<view class="flex flex-wrap text-white text-df padding-sm">
-				<view class="basis-xl">管理员:{{labInfo.Administrator}}</view>
-				<view class="basis-xl">联系电话:{{labInfo.AdminTelephone}}</view>
-			</view>
-		</view>
+		<labInfoCard class="margin-lr" :lab="labInfo"></labInfoCard>
 		<scroll-view scroll-x class="bg-white nav text-center cardPosition shadow" :style="[{height:customBar + 'px'}]">
-			<view class="cu-item" :class="index==tabCur?'text-blue cur':''" v-for="(item,index) in arrays" :key="index" @tap="tabSelect" :data-id="index">
+			<view class="cu-item" :class="index==tabCur?'text-informatic-brown text-bold cur':''" v-for="(item,index) in arrays" :key="index" @tap="tabSelect" :data-id="index">
 				{{item}}
 			</view>
 		</scroll-view>
-		<view class="margin-tb bg-white text-center" v-if="tabCur==0">
+		<view class="margin-tb bg-white text-center padding-tb" v-if="tabCur==0">
 			<text>0暂无内容</text>
 		</view>
 		<view class="margin-tb bg-white cu-list menu" v-else-if="tabCur==1">
@@ -38,10 +26,10 @@
 </template>
 
 <script>
+	let app = require("@/config");
 	let enums = require("../enumsv1.js");
 	export default{
 		onLoad(opt) {
-			//document.selectByName
 			this.labInfo.ID = opt.id;
 			this.getData();
 			uni.getStorage({
@@ -57,8 +45,16 @@
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
 			create() {
+				if(app.checkPermission("ItemManager.CreateSoftwareInstallWorkflow")==-1)
+				{
+					uni.showToast({
+						title: "您没有权限",
+						icon: "none"
+					})
+					return;
+				};
 				uni.navigateTo({
-					url: "./create?buildingID="+this.labInfo.BuildingId+"&roomID="+this.labInfo.ID
+					url: "./create?buildingID="+this.labInfo.BuildingId+"&roomID="+this.labInfo.ID+"&BuildingName="+this.labInfo.Building.Name+"&labName="+this.labInfo.Name
 				})
 			},
 			getData(){
@@ -98,7 +94,8 @@
 				applicationData: [],
 				icon: '../../../static/XMU.png',
 				buildingDic: {},
-				customBar: this.CustomBar
+				customBar: this.CustomBar,
+				labs:[]
 			}
 		}
 	}

@@ -1,8 +1,8 @@
 <template>
-	<view id="all-apply-list">
+	<view>
 		<cu-custom bgColor="bg-informatic-brown" isBack>
 			<block slot="backText">返回</block>
-			<block slot="content">所有申请</block>
+			<block slot="content">我的参与</block>
 		</cu-custom>
 		<view class="cu-bar bg-white solids-bottom">
 			<view class="action">
@@ -42,7 +42,7 @@
 			getData(p) {
 				let page = p || this.page;
 				let pageSize = this.pageSize;
-				uni.post("/api/roomApp/v1/GetAllApplications", {
+				uni.post("/api/roomApp/v1/GetAllMyApplication", {
 					page,
 					pageSize,
 				}, msg => {
@@ -61,7 +61,7 @@
 					url: "/iuc/roomApplication/v1/detail?id=" + id
 				})
 			},
-			// ListTouch触摸开始
+			/*// ListTouch触摸开始
 			ListTouchStart(e) {
 				this.listTouchStart = e.touches[0].pageX
 			},
@@ -79,7 +79,7 @@
 					this.modalName = null
 				}
 				this.listTouchDirection = null
-			},
+			},*/
 			foldUp() {
 				this.display = !this.display
 			}
@@ -103,6 +103,8 @@
 
 <style>
 	.cu-list>.cu-item {
+		padding-top: 16rpx;
+		padding-bottom: 6rpx;
 		transition: all 1s;
 	}
 

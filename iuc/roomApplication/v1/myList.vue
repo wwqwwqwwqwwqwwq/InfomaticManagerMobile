@@ -2,10 +2,10 @@
 	<view id="lab-apply-list">
 		<cu-custom bgColor="bg-informatic-brown" isBack>
 			<block slot="backText">返回</block>
-			<block slot="content">我的待办</block>
+			<block slot="content">我的申请</block>
 		</cu-custom>
 		<transition-group class="cu-card" name="list">
-			<view class="cu-item bg-informatic-brown shadow" v-show="display"
+			<view class="cu-item bg-informatic-brown shadow"
 			v-for="(item,index) in data" :key="index" @click="toExecute(item)">
 				<sticky :item="item" />
 			</view>
@@ -32,12 +32,13 @@
 			getData(p) {
 				let page = p || this.page;
 				let pageSize = this.pageSize;
-				uni.post("/api/roomApp/v1/GetMyPending", {
+				uni.post("/api/roomApp/v1/GetMyApplication", {
 					page,
 					pageSize
 				}, msg => {
 					if (msg.success) {
 						this.data = msg.data;
+						this.data = this.data.filter(e => e.State != 0);
 					}
 				})
 			},
@@ -46,25 +47,6 @@
 					url: item.RouteData
 				})
 			}
-			/* ListTouch触摸开始
-			ListTouchStart(e) {
-				this.listTouchStart = e.touches[0].pageX
-			},
-
-			// ListTouch计算方向
-			ListTouchMove(e) {
-				this.listTouchDirection = e.touches[0].pageX - this.listTouchStart > 0 ? 'right' : 'left'
-			},
-
-			// ListTouch计算滚动
-			ListTouchEnd(e) {
-				if (this.listTouchDirection == 'left') {
-					this.modalName = e.currentTarget.dataset.target
-				} else {
-					this.modalName = null
-				}
-				this.listTouchDirection = null
-			}*/
 		},
 		data() {
 			return {
@@ -76,8 +58,7 @@
 				data: [],
 				modalName: null,
 				listTouchStart: 0,
-				listTouchDirection: null,
-				display: true
+				listTouchDirection: null
 			}
 		}
 	}
