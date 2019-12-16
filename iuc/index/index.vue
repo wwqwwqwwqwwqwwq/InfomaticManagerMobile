@@ -3,7 +3,7 @@
 		<swiper class="screen-swiper" autoplay="true" indicator-dots="true" indicator-active-color="white" indicator-color="grey"
 		 circular="true">
 			<swiper-item v-for='(item,index) in swiperList' :key='index'>
-				<image :src="item"></image>
+				<image :src="item" mode="aspectFit" style="height: 423rpx;"></image>
 			</swiper-item>
 		</swiper>
 		<view class="bg-white flex solids-bottom padding-tb-sm justify-between align-center">
@@ -11,11 +11,11 @@
 				<text class="cuIcon-notification"></text>
 				<text class="text-bold margin-lr-xs">通知公告</text>
 			</view>
-			<swiper style="height: 40rpx;width: 250rpx;" class="swiper" autoplay="true" interval="4000" duration="500" circular="true"
+			<swiper style="height: 40rpx;width: 400rpx;" class="swiper" autoplay="true" interval="4000" duration="500" circular="true"
 			 vertical="true">
-				<swiper-item v-for="(item,index) in swiperArray" :key='index'>{{item}}</swiper-item>
+				<swiper-item v-for="(item,index) in swiperArray" :key='index' class="text-cut">{{item}}</swiper-item>
 			</swiper>
-			<view class="margin-right text-informatic-brown" @click="navToNews">查看更多<text class="cuIcon-playfill"></text></view>
+			<view class="margin-right text-informatic-brown" @click="navToNews">更多<text class="cuIcon-playfill"></text></view>
 		</view>
 		<view class="padding-bottom bg-white">
 			<view class="cu-bar bg-white">
@@ -64,9 +64,9 @@
 		data() {
 			return {
 				swiperArray: [
-					"实验室管理系统",
-					"开通新功能啦~",
-					"新功能炸啦！"
+					"厦门大学100周年校庆网站开通",
+					"数字城市与人工智能实验室签约挂牌",
+					"中心党支部开展“不忘初心”系列学习活动！"
 				],
 				swiperList: {
 					img1: "../../static/轮播图片画板1.png",
@@ -76,7 +76,7 @@
 				mine: [{
 						image: "../../static/我的申请.png",
 						text: "我的申请",
-						source: "../roomApplication/v1/myList"
+						source: "../roomApplication/v2/myApplication"
 					},
 					{
 						image: "../../static/我的待办.png",
@@ -86,7 +86,7 @@
 					{
 						image: "../../static/我的参与.png",
 						text: "我的参与",
-						source: "../roomApplication/v1/myInvolve",
+						source: "../roomApplication/v2/myAttend",
 					},
 					{
 						image: "../../static/扫一扫.png",
@@ -97,7 +97,7 @@
 				functionList: [{
 						image: "../../static/实验室列表.png",
 						text: "实验室列表",
-						source: "../roomApplication/v2/work"
+						source: "../roomView/labList"
 					},
 					{
 						image: "../../static/实验室申请.png",
@@ -108,7 +108,7 @@
 					{
 						image: "../../static/实验室列表.png",
 						text: "所有申请",
-						source: "../roomApplication/v1/alllist"
+						source: "../roomApplication/v2/allList"
 					},
 					{
 						image: "../../static/申请机位.png",
