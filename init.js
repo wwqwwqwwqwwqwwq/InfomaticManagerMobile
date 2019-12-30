@@ -34,6 +34,21 @@ uni.post = (url, params, callback) => {
 	})
 }
 
+uni.syncPost = async (url, params, callback) => {
+	let [err, res] = await uni.request({
+		url: app.domain + url,
+		method: "POST",
+		data: {
+			...params,
+			currentUserGuid: app.currentUserGuid
+		},
+		header: {
+			'content-type': "application/x-www-form-urlencoded"
+		}
+	})
+	return res.data;
+}
+
 uni.postStream = (url, params, callback) => {
 	uni.request({
 		url: app.domain + url,
@@ -67,5 +82,5 @@ uni.showMessage = (title, deltaNum, backUrl, icon) => {
 			});
 		}
 		uni.hideToast();
-	}, 1500);
+	}, 3000);
 }
