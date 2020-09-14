@@ -55,7 +55,7 @@
     },
     "h5" : {
         "title" : "信息学院实验平台",
-        "domain" : "item.ricebird.cn",
+        "domain" : "unify.xmu.edu.cn",
         "router" : {
             "mode" : "history",
             "base" : "/mob/"
