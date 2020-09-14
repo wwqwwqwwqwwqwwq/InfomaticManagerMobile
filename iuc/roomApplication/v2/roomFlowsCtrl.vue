@@ -142,7 +142,7 @@
 			<button class="flex-sub bg-cyan margin-top" @click="onSubmit()" v-if="io.submitBtns.length===1">{{io.submitBtns[0].Text}}</button>
 			<view style="height: 180rpx; width: 100%;" v-else>
 				<view class="flex-sub cu-list grid cu-bar foot" :class="['col-'+io.submitBtns.length]">
-					<view v-for="(item,index) in io.submitBtns" class="cu-item" @click="onSubmit(item)" :key="index">
+					<view v-for="(item,index) in io.submitBtns" class="cu-item" @click="onSubmit(item, 1)" :key="index">
 						<view :class="item.Icon"></view>
 						<text>{{item.Text}}</text>
 					</view>
@@ -231,7 +231,7 @@
 			}
 		},
 		methods: {
-			 async formValidate() {
+			 async formValidate(ajaxFlag) {
 				let errors = [];
 				if (this.isStudent && this.io.data.GuideTeacherId === "00000000-0000-0000-0000-000000000000" && this.io.currentStep ===
 					"填写申请表") {
@@ -251,20 +251,20 @@
 					id: io.data.ID
 				});
 				
-				if (!res.success) {
+				if (!res.success && !ajaxFlag) {
 					errors.push(res.msg);
 				}
 				
 				return errors;
 			},
-			async onSubmit(item) {
+			async onSubmit(item, ajaxFlag) {
 				if (item) {
 					this.io.data[item.Field] = item.Value;
 				}
 				this.io.shouldUpload.forEach(value => {
 					this.upLoad[value] = this.io[value] || this.io.data[value]
 				});
-				let errors = await this.formValidate();
+				let errors = await this.formValidate(ajaxFlag);
 				if (errors.length > 0) {
 					uni.showMessage(errors[0]);
 				} else {
