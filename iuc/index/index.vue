@@ -68,6 +68,12 @@
 					</view>
 					<text>{{item.text}}</text>
 				</view>
+				<view class="cu-item" @click="navTo('../News/newsList')">
+					<view class="bg-informatic-brown text-center flex align-center" style="width: 48px; height: 48px; margin: 0 auto; border-radius: 8px;">
+						<view class="cuIcon-info" style="font-size: 36px; color: #FFF;margin-top: 0px;"></view>
+					</view>
+					<text>创新实验室通知</text>
+				</view>
 			</view>
 		</view>
 		<navTab :selection='0' />
@@ -135,7 +141,7 @@
 						image: "../../static/通讯录.png",
 						text: "通讯录",
 						source: "../addressBook/addressBook"
-					} //,
+					}//,
 					// {
 					// 	image: "../../static/实验室申请.png",
 					// 	text: "申请实验室",

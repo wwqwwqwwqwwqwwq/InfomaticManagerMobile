@@ -96,6 +96,9 @@
 		,{
 		    "path" : "iuc/bindWeChat/bind",
 		    "style" : {}
+		},{
+		    "path" : "iuc/bindWeChat/unbind",
+		    "style" : {}
 		}
     ],
 	"globalStyle": {
