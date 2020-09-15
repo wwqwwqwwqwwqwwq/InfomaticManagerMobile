@@ -142,7 +142,7 @@
 			<button class="flex-sub bg-cyan margin-top" @click="onSubmit()" v-if="io.submitBtns.length===1">{{io.submitBtns[0].Text}}</button>
 			<view style="height: 180rpx; width: 100%;" v-else>
 				<view class="flex-sub cu-list grid cu-bar foot" :class="['col-'+io.submitBtns.length]">
-					<view v-for="(item,index) in io.submitBtns" class="cu-item" @click="onSubmit(item)" :key="index">
+					<view v-for="(item,index) in io.submitBtns" class="cu-item" @click="onSubmit(item, 1)" :key="index">
 						<view :class="item.Icon"></view>
 						<text>{{item.Text}}</text>
 					</view>
@@ -179,11 +179,15 @@
 							id
 						}, msg => {
 							this.io = msg;
-							for (let role in this.io.data.OwnerRoles) {
-								if (this.io.data.OwnerRoles[role] === "老师") {
-									this.isStudent = false;
-									break;
+							if (msg.success) {
+								for (let role in this.io.data.OwnerRoles) {
+									if (this.io.data.OwnerRoles[role] === "老师") {
+										this.isStudent = false;
+										break;
+									}
 								}
+							} else {
+								uni.showMessage(msg.msg);
 							}
 						});
 					}
@@ -195,27 +199,31 @@
 						uni.post("/api/workflow/LoadInstance", { ...res.data,
 							detail: true
 						}, msg => {
-							this.io = msg;
-							for (let role in this.io.data.OwnerRoles) {
-								if (this.io.data.OwnerRoles[role] === "老师") {
-									this.isStudent = false;
-									break;
-								}
-							}
-							if (this.io.intstanceState === 5) {
-								for (let index in this.io.allSteps) {
-									if (this.io.allSteps[index].status === 0) {
-										this.io.allSteps[index - 1].status = 30;
-										this.io.timelines[0].steps[0].State = 4;
+							if (msg.success) {
+								this.io = msg;
+								for (let role in this.io.data.OwnerRoles) {
+									if (this.io.data.OwnerRoles[role] === "老师") {
+										this.isStudent = false;
 										break;
 									}
 								}
-							}
-							for (let role in this.io.data.OwnerRoles) {
-								if (this.io.data.OwnerRoles[role] === "老师") {
-									this.isStudent = false;
-									break;
+								if (this.io.intstanceState === 5) {
+									for (let index in this.io.allSteps) {
+										if (this.io.allSteps[index].status === 0) {
+											this.io.allSteps[index - 1].status = 30;
+											this.io.timelines[0].steps[0].State = 4;
+											break;
+										}
+									}
 								}
+								for (let role in this.io.data.OwnerRoles) {
+									if (this.io.data.OwnerRoles[role] === "老师") {
+										this.isStudent = false;
+										break;
+									}
+								}
+							} else {
+								uni.showMessage(msg.msg);
 							}
 						});
 					}
@@ -223,7 +231,7 @@
 			}
 		},
 		methods: {
-			formValidate() {
+			 async formValidate(ajaxFlag) {
 				let errors = [];
 				if (this.isStudent && this.io.data.GuideTeacherId === "00000000-0000-0000-0000-000000000000" && this.io.currentStep ===
 					"填写申请表") {
@@ -235,16 +243,28 @@
 					if (pat.test(this.upLoad.Telephone) === false)
 						errors.push("请输入正确的电话号码");
 				}
+				let io = this.io;
+				let res = await uni.syncPost("/api/roomApp/v1/CheckRoomAvailable", {
+					start: io.data.StartDate,
+					end: io.data.EndDate,
+					roomId: io.data.RoomId,
+					id: io.data.ID
+				});
+				
+				if (!res.success && !ajaxFlag) {
+					errors.push(res.msg);
+				}
+				
 				return errors;
 			},
-			onSubmit(item) {
+			async onSubmit(item, ajaxFlag) {
 				if (item) {
 					this.io.data[item.Field] = item.Value;
 				}
 				this.io.shouldUpload.forEach(value => {
 					this.upLoad[value] = this.io[value] || this.io.data[value]
 				});
-				let errors = this.formValidate();
+				let errors = await this.formValidate(ajaxFlag);
 				if (errors.length > 0) {
 					uni.showMessage(errors[0]);
 				} else {
@@ -253,7 +273,7 @@
 						if (msg.success === true) {
 							uni.showMessage('提交成功', 1, '', 'success');
 						} else {
-							uni.showMessage(msg.msg);
+							uni.showMessage(msg.msg, 1);
 						}
 					})
 				}
