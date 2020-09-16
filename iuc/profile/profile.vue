@@ -13,7 +13,7 @@
 				<view class="basis-lg margin">
 					<view class="text-white">
 						<text class="text-xxl block margin-bottom-xs">{{userInfo.RealName}}</text>
-						<text>detail information</text>
+						<text>欢迎来到信息学院</text>
 					</view>
 				</view>
 			</view>
@@ -73,14 +73,14 @@
 					name: "实验室列表",
 					url: "../roomView/labList?type=-1",
 					cuIcon: "presentfill"
-				}, {
+				}/*, {
 					name: "测试入口",
 					url: "../index/testEntry",
 					cuIcon: "babyfill"
-				}, {
-					name: "历史记录",
-					url: "",
-					cuIcon: "newsfill"
+				}*/, {
+					name: "解绑微信",
+					url: "../bindWeChat/unbind",
+					cuIcon: "unlock"
 				}, {
 					name: "其他功能",
 					url: "",
