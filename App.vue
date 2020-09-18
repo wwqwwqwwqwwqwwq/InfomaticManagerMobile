@@ -9,12 +9,9 @@
 					return (ps && ps.indexOf(p)) >= 0;
 				}
 				// this.loginSuccess(app.userInfo.currentUserGuid);
-				uni.navigateTo({
-					url: app.dashboard
-				})
 			} else {
 				uni.navigateTo({
-					url: "/iuc/index/index"
+					url: "http://unify.xmu.edu.cn/r/RcR21D"
 					// url: "uc/login/login"
 				})
 			}
