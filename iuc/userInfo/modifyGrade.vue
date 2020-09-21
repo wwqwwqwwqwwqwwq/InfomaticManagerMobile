@@ -2,14 +2,14 @@
 	<view>
 		<cu-custom bgColor="bg-gradual-blue" :isBack="true">
 			<block slot="backText">返回</block>
-			<block slot="content">修改年龄</block>
+			<block slot="content">修改年级</block>
 		</cu-custom>
 		<view class="margin">
 			<view class="input-group">
 				<input class="solids-bottom margin-lr padding-left-sm" style="border-radius:30px;" focus=true :placeholder='preAge'
-				 placeholder-class="text-lg" type="number" maxlength=3 v-model="age">
+				 placeholder-class="text-lg" type="number" :maxlength="4" v-model="age">
 			</view>
-			<view class="margin-lr-lg text-lg margin-top-xs">请输入新年龄</view>
+			<view class="margin-lr-lg text-lg margin-top-xs">请输入新年级</view>
 			<view class="padding flex flex-direction margin-top-lg">
 				<button class="cu-btn bg-blue lg" v-on:click="Modifyage">保存</button>
 			</view>

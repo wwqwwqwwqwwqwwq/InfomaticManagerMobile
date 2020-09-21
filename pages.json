@@ -72,6 +72,15 @@
 		{
 			"path":"iuc/userInfo/modifyMobile",
 			"style": {}
+		},
+		{
+			"path":"iuc/userInfo/modifyEmail",
+			"style": {}
+		}
+		,
+		{
+			"path":"iuc/userInfo/modifyTel",
+			"style": {}
 		}
         ,{
             "path" : "components/labComponent/labTimeLine",
@@ -100,6 +109,10 @@
 		    "path" : "iuc/bindWeChat/unbind",
 		    "style" : {}
 		}
+        ,{
+            "path" : "iuc/userInfo/modifyMajor",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"mp-alipay": {
