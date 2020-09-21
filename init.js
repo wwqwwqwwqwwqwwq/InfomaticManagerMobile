@@ -5,7 +5,7 @@ uni.get = (url, params, callback) => {
 		url: app.domain + url,
 		data: {
 			...params,
-			currentUserGuid: app.currentUserGuid
+			deviceKey: app.currentUserGuid
 		},
 		success(res) {
 			if (typeof callback === 'function') {
@@ -21,7 +21,7 @@ uni.post = (url, params, callback) => {
 		method: "POST",
 		data: {
 			...params,
-			currentUserGuid: app.currentUserGuid
+			deviceKey: app.currentUserGuid
 		},
 		header: {
 			'content-type': "application/x-www-form-urlencoded"
@@ -40,7 +40,7 @@ uni.syncPost = async (url, params, callback) => {
 		method: "POST",
 		data: {
 			...params,
-			currentUserGuid: app.currentUserGuid
+			deviceKey: app.currentUserGuid
 		},
 		header: {
 			'content-type': "application/x-www-form-urlencoded"
@@ -55,7 +55,7 @@ uni.postStream = (url, params, callback) => {
 		method: "POST",
 		data: {
 			...params,
-			currentUserGuid: app.currentUserGuid
+			deviceKey: app.currentUserGuid
 		},
 		success(res) {
 			if (typeof callback === 'function') {
