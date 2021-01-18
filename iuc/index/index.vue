@@ -141,13 +141,12 @@
 						image: "../../static/通讯录.png",
 						text: "通讯录",
 						source: "../addressBook/addressBook"
+					},
+					{
+						image: "../../static/实验室申请.png",
+						text: "讲座列表",
+						source: "../lecture/list"
 					}//,
-					// {
-					// 	image: "../../static/实验室申请.png",
-					// 	text: "申请实验室",
-					// 	source: "../roomApplication/v2/flowsCtrl?create=true",
-					// 	permission: "ItemManager.CreateRoomApplicationWorkflow"
-					// },
 					// {
 					// 	image: "../../static/实验室列表.png",
 					// 	text: "所有申请",
