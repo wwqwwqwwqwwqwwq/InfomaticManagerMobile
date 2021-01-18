@@ -5,18 +5,18 @@
 			<block slot="content">讲座列表</block>
 		</cu-custom>
 		<view class="cu-list menu-avatar">
-			<view class="cu-item">
-				<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view>
+			<view class="cu-item" v-for="lecture in lectures" :key="lecture.ID" @click="toDetail(lecture.ID)">
+				<view class="cu-avatar round lg" :style="`background-image:url(${app.webInfo.avatar});`"></view>
 				<view class="content">
-					<view class="text-black">Vue.js系列讲座</view>
+					<view class="text-black">{{lecture.Name}}</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
-							我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。
+							{{lecture.BeginOn}} - {{lecture.EndOn}}
 						</view> </view>
 				</view>
 				<view class="action">
-					<view class="text-grey text-xs">22:20</view>
-					<view class="cu-tag round bg-grey sm">5</view>
+					<!-- <view class="text-grey text-xs">写啥呢</view> -->
+					<view class="cu-tag round bg-grey sm">未开始</view>
 				</view>
 			</view>
 		</view>
@@ -24,15 +24,20 @@
 </template>
 
 <script>
+	const app = require("@/config");
 	export default{
 		data() {
 			return {
-				lectures: []
+				lectures: [],
+				app
 			}
+		},
+		onLoad() {
+			this.getLectures();
 		},
 		methods: {
 			getLectures() {
-				uni.post("/api/activity/SaveActivityCategory", {}, msg => {
+				uni.post("/api/activity/GetAcitvities", {}, msg => {
 					if(msg.success) {
 						this.lectures = msg.data;
 					} else {
@@ -41,6 +46,11 @@
 							icon: "none"
 						})
 					}
+				});
+			},
+			toDetail(id){
+				uni.navigateTo({
+					url: `./detail?id=${id}`
 				});
 			}
 		}
