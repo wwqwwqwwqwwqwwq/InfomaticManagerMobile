@@ -68,21 +68,17 @@
 				</view>
 			</template>
 		</view>
-		<view class="cu-bar foot bg-white tabbar border shop">
-			<button class="action" open-type="contact">
-				<view class="cuIcon-service text-green">
-					<view class="cu-tag badge"></view>
-				</view>
-				客服
-			</button>
-			<view class="action">
-				<view class="cuIcon-cart">
-					<view class="cu-tag badge">99</view>
-				</view>
-				购物车
+		<view class="cu-bar foot bg-white">
+			<view class="flex-sub text-center">
+				<text class="text-lg">已报名</text>
+				<br />
+				<text>32人</text>
 			</view>
-			<view class="bg-orange submit">加入购物车</view>
-			<view class="bg-red submit">立即订购</view>
+			<view class="flex-treble flex justify-end padding-lr">
+				<button class="bg-cyan cu-btn round lg">
+					<text class="padding-lr-xl">我要报名</text>
+				</button>
+			</view>
 		</view>
 		<view style="height: 50px;"></view>
 	</view>
