@@ -99,6 +99,14 @@
 		    "style" : {}
 		}
 		,{
+		    "path" : "iuc/lecture/list",
+		    "style" : {}
+		}
+		,{
+		    "path" : "iuc/lecture/detail",
+		    "style" : {}
+		}
+		,{
 		    "path" : "iuc/alert/fail",
 		    "style" : {}
 		}
