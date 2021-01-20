@@ -61,12 +61,31 @@
 						</button>
 					</view>
 				</view>
-				<view class="padding" v-show="showDetail === subLecture.ID">
+				<view class="padding solid-top solid-bottom bg-white" v-show="showDetail === subLecture.ID">
+					<text class="cuIcon-info"></text>
 					<text>状态：{{subLecture.Status}}</text>
-					<br/>
+					<br />
+					<text class="cuIcon-people"></text>
 					<text>汇报人：{{subLecture.Hoster}}</text>
+					<br />
+					<text class="cuIcon-location"></text>
+					<text>地点：{{subLecture.Address}}</text>
+					<br />
+					<text class="cuIcon-time"></text>
+					<text>活动开始时间：{{subLecture.BeginOn}}</text>
+					<br />
+					<text class="cuIcon-timefill"></text>
+					<text>活动结束时间：{{subLecture.EndOn}}</text>
 				</view>
 			</template>
+		</view>
+		<view class="cu-list menu">
+			<view class="cu-item">
+				<view class="content">
+					<text class="text-lg">签到测试</text>
+				</view>
+			</view>
+			<button class="cu-btn bg-blue block lg margin-left margin-right" @click="toSignUp">点击签到</button>
 		</view>
 		<view class="cu-bar foot bg-white">
 			<view class="flex-sub text-center">
@@ -76,7 +95,7 @@
 			</view>
 			<view class="flex-treble flex justify-end padding-lr">
 				<button class="bg-cyan cu-btn round lg">
-					<text class="padding-lr-xl">我要报名</text>
+					<text class="padding-lr-xl">{{isSignedUp ? "取消报名" : "我要报名"}}</text>
 				</button>
 			</view>
 		</view>
@@ -85,20 +104,24 @@
 </template>
 
 <script>
+	let app = require("@/config");
 	export default {
 		data() {
 			return {
 				showDetail: "",
 				lecture: {},
-				subLectures: []
+				subLectures: [],
+				isSignedUp: false,
+				thisId: ""
 			}
 		},
 		onLoad(e) {
 			this.getSubLectures(e.id);
+			this.thisId = e.id;
 		},
 		methods: {
 			show(id) {
-				if(this.showDetail) this.showDetail = "";
+				if (this.showDetail) this.showDetail = "";
 				else this.showDetail = id;
 			},
 			getSubLectures(id) {
@@ -120,6 +143,23 @@
 				uni.navigateTo({
 					url: `./detail?id=${id}`
 				});
+			},
+			toSignUp() {
+				if (app.userInfo.isLogined == false) {
+					alert("请先登录");
+					uni.navigateTo({
+						url: `../profile/profile`
+					});
+				} else if (app.userInfo.email == '' || app.userInfo.mobile == '') {
+					alert("请填写您的手机号以及邮箱");
+					uni.navigateTo({
+						url: `../userInfo/userInfo`
+					});
+				} else {
+					uni.navigateTo({
+						url: `../signUp/signUp?id=${this.thisId}`
+					});
+				}
 			}
 		}
 	}

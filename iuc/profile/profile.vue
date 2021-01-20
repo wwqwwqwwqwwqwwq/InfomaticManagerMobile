@@ -73,11 +73,11 @@
 					name: "实验室列表",
 					url: "../roomView/labList?type=-1",
 					cuIcon: "presentfill"
-				},/* {
+				},{
 					name: "测试入口",
 					url: "../index/testEntry",
 					cuIcon: "babyfill"
-				},*/ {
+				}, {
 					name: "解绑微信",
 					url: "../bindWeChat/unbind",
 					cuIcon: "unlock"
