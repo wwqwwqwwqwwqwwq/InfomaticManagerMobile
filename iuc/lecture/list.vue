@@ -37,9 +37,10 @@
 		},
 		methods: {
 			getLectures() {
-				uni.post("/api/activity/GetAcitvities", {}, msg => {
+				uni.post("/api/activity/GetUserActivities", {}, msg => {
 					if(msg.success) {
 						this.lectures = msg.data;
+						// console.log(msg.data);
 					} else {
 						uni.showToast({
 							title: msg.msg,
