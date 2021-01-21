@@ -1,10 +1,5 @@
 <template>
 	<view id="SignUp">
-		<cu-custom bgColor="bg-informatic-brown" isBack>
-			<block slot="backText">返回</block>
-			<block slot="content">讲座列表</block>
-		</cu-custom>
-		<div class="bg"></div>
 		<div class="container">
 			<div class="cotent-container">
 				<div class="header">
@@ -48,8 +43,8 @@
 						<button v-if="!hasSignedIn" class="cu-btn bg-blue block lg margin-left margin-right" @click="signUp">点击签到</button>
 						<view v-if="hasSignedIn" class="flex-sub text-center text-lg padding">
 							<text class="text-black text-bold">签到成功！</text>
-							<br>
-							<text class="text-black">{{signUpTime}}</text>
+							<!-- <br>
+							<text class="text-black">{{signInTime}}</text> -->
 						</view>
 					</div>
 				</div>
@@ -67,7 +62,7 @@
 		data() {
 			return {
 				hasSignedIn: false,
-				signInTime: "2021年1月19日 12:00",
+				signInTime: "-",
 				title: "-",
 				hoster: "-",
 				beginOnTime: "-",
@@ -78,7 +73,7 @@
 				status: "-",
 				thisId: "",
 				lecture: {},
-				activities: []
+				activities: [],
 			}
 		},
 		onLoad(e) {
@@ -88,12 +83,14 @@
 		},
 		methods: {
 			getSubLectures(id) {
-				uni.post("/api/activity/GetActivityCategory", {
+				uni.post("/api/activity/GetUserActivity", {
 					id
 				}, msg => {
 					if (msg.success) {
 						this.lecture = msg.data;
-						this.subLectures = msg.activities;
+						this.hasSignedIn = msg.isSignIn;
+						// this.subLectures = msg.activities;
+						// console.log(msg);
 						this.changeData();
 					} else {
 						uni.showToast({
@@ -102,6 +99,19 @@
 						})
 					}
 				});
+			},
+			checkUserData() {
+				if (app.userInfo.isLogined == false) {
+					alert("请先登录");
+					uni.navigateTo({
+						url: `../profile/profile`
+					});
+				} else if (app.userInfo.email == '' || app.userInfo.mobile == '') {
+					alert("请填写您的手机号以及邮箱");
+					uni.navigateTo({
+						url: `../userInfo/userInfo`
+					});
+				}
 			},
 			changeData() {
 				this.lecture.BeginOn = this.timeToString(new Date(this.lecture.BeginOn));
@@ -112,7 +122,7 @@
 				var endOn = this.lecture.EndOn.split(' ');
 				this.endOnDate = endOn[0];
 				this.endOnTime = (endOn[1].split(':'))[0] + ':' + (endOn[1].split(':'))[1];
-				this.status = this.lecture.status;
+				this.status = this.lecture.Status;
 				this.duration = this.calcDuration(beginOn, endOn);
 			},
 			calcDuration(beginOn, endOn) {
@@ -129,24 +139,26 @@
 				}
 			},
 			signUp() {
-				uni.post("/api/activity/SignIn", {
-					id: this.thisId,
-					state: 0
-				}, msg => {
-					if (msg.success) {
-						uni.showToast({
-							title: "签到成功！",
-							icon: "none"
-						});
-						this.hasSignedIn = true;
-						this.signInTime = this.timeToString(new Date());
-					} else {
-						uni.showToast({
-							title: msg.msg,
-							icon: "none"
-						})
-					}
-				});
+				if (!this.hasSignedIn) {
+					uni.post("/api/activity/SignIn", {
+						id: this.thisId,
+						state: 0
+					}, msg => {
+						if (msg.success) {
+							uni.showToast({
+								title: "签到成功！",
+								icon: "none"
+							});
+							this.hasSignedIn = true;
+							this.signInTime = this.timeToString(new Date());
+						} else {
+							uni.showToast({
+								title: msg.msg,
+								icon: "none"
+							})
+						}
+					});
+				}
 			},
 			timeToString(date) {
 				var y = date.getFullYear();
@@ -205,21 +217,10 @@
 		visibility: hidden
 	}
 
-	/* 2. 总体背景 */
-	.bg {
-		background: url('../../static/SignUpBack.jpg') no-repeat 50% 50% / cover;
-		position: fixed;
-		left: 0px;
-		right: 0px;
-		top: 0px;
-		bottom: 0px;
-		filter: blur(20px);
-	}
-
 	.container {
 		width: 375px;
 		min-height: 570px;
-		max-height: 724px;
+		max-height: 100vh;
 		position: absolute;
 		margin: auto;
 		left: 0px;
@@ -230,13 +231,13 @@
 
 	.cotent-container {
 		width: 100%;
-		/* height: 100%; */
+		height: 100%;
 		background: #f8f9fb;
 		position: relative;
 		border-radius: 5px;
 		box-shadow: 0 0 20px 0 rgba(0, 0, 0, .2);
 		margin: auto;
-		margin-top: 25vh;
+		/* margin-top: 25vh; */
 	}
 
 	/* 3. 会议卡片 */

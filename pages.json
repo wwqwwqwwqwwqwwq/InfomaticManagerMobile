@@ -122,7 +122,7 @@
             "style" : {}
         }
         ,{
-            "path" : "iuc/signUp/signUp",
+            "path" : "iuc/signIn/signIn",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
