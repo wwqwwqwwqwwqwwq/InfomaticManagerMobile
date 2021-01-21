@@ -184,13 +184,13 @@
 				var time = new Date();
 				if (time < new Date(this.lecture.SignUpBegin)) {
 					this.state = "未开始";
+				} else if (time > new Date(this.lecture.BeginOn) && time < new Date(this.lecture.EndOn)) {
+					this.state = "进行中";
+					this.showSignInState = true;
 				} else if (time < new Date(this.lecture.SignUpEnd)) {
 					this.state = "报名中";
 				} else if (time > new Date(this.lecture.SignUpEnd) && time < new Date(this.lecture.BeginOn)) {
 					this.state = "准备中";
-				} else if (time > new Date(this.lecture.BeginOn) && time < new Date(this.lecture.EndOn)) {
-					this.state = "进行中";
-					this.showSignInState = true;
 				} else {
 					this.state = "已结束";
 					this.showSignInState = true;

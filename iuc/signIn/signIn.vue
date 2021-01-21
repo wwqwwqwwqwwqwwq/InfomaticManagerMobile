@@ -1,5 +1,6 @@
 <template>
 	<view id="SignUp">
+		<view class="bg"></view>
 		<div class="container">
 			<div class="cotent-container">
 				<div class="header">
@@ -40,11 +41,17 @@
 						<div class="card-quarter-lt card-quarter"></div>
 						<div class="card-quarter-rt card-quarter"></div>
 						<!-- <a href="javascript:;" class="add-to-mymeeting">添加到我的会议</a> -->
-						<button v-if="!hasSignedIn" class="cu-btn bg-blue block lg margin-left margin-right" @click="signUp">点击签到</button>
+						<button v-if="!hasSignedIn && signInState == 1" class="cu-btn bg-blue block lg margin-left margin-right" @click="signUp">点击签到</button>
 						<view v-if="hasSignedIn" class="flex-sub text-center text-lg padding">
 							<text class="text-black text-bold">签到成功！</text>
 							<!-- <br>
 							<text class="text-black">{{signInTime}}</text> -->
+						</view>
+						<view v-if="!hasSignedIn && signInState == 0" class="flex-sub text-center text-lg padding">
+							<text class="text-black text-bold">签到未开始</text>
+						</view>
+						<view v-if="!hasSignedIn && signInState == 2" class="flex-sub text-center text-lg padding">
+							<text class="text-black text-bold">签到已结束</text>
 						</view>
 					</div>
 				</div>
@@ -74,11 +81,13 @@
 				thisId: "",
 				lecture: {},
 				activities: [],
+				signInState: 0
 			}
 		},
 		onLoad(e) {
 			this.getSubLectures(e.id);
 			this.thisId = e.id;
+			this.checkUserData();
 			// console.log(app);
 		},
 		methods: {
@@ -124,6 +133,14 @@
 				this.endOnTime = (endOn[1].split(':'))[0] + ':' + (endOn[1].split(':'))[1];
 				this.status = this.lecture.Status;
 				this.duration = this.calcDuration(beginOn, endOn);
+				var time = new Date();
+				if (time < this.lecture.BeginOn) {
+					this.signInState = 0;
+				} else if (time > this.lecture.EndOn) {
+					this.signInState = 2;
+				} else {
+					this.signInState = 1;
+				}
 			},
 			calcDuration(beginOn, endOn) {
 				let startTime = new Date(beginOn);
@@ -208,6 +225,16 @@
 	ul {
 		list-style: none;
 	}
+	
+	.bg {
+	    background: url('../../static/SignUpBack.jpg') no-repeat 50% 50% / cover;
+	    position: fixed;
+	    left: 0px;
+	    right: 0px;
+	    top: 0px;
+	    bottom: 0px;
+	    filter: blur(20px);
+	}
 
 	.clearfix:after {
 		content: " ";
@@ -220,7 +247,7 @@
 	.container {
 		width: 375px;
 		min-height: 570px;
-		max-height: 100vh;
+		max-height: 90vh;
 		position: absolute;
 		margin: auto;
 		left: 0px;
