@@ -99,6 +99,14 @@
 		    "style" : {}
 		}
 		,{
+		    "path" : "iuc/lecture/list",
+		    "style" : {}
+		}
+		,{
+		    "path" : "iuc/lecture/detail",
+		    "style" : {}
+		}
+		,{
 		    "path" : "iuc/alert/fail",
 		    "style" : {}
 		}
@@ -112,6 +120,15 @@
         ,{
             "path" : "iuc/userInfo/modifyMajor",
             "style" : {}
+        }
+        ,{
+            "path" : "iuc/signIn/signIn",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
         }
     ],
 	"globalStyle": {
