@@ -134,9 +134,9 @@
 				this.status = this.lecture.Status;
 				this.duration = this.calcDuration(beginOn, endOn);
 				var time = new Date();
-				if (time < this.lecture.BeginOn) {
+				if (time < new Date(this.lecture.BeginOn)) {
 					this.signInState = 0;
-				} else if (time > this.lecture.EndOn) {
+				} else if (time > new Date(this.lecture.EndOn)) {
 					this.signInState = 2;
 				} else {
 					this.signInState = 1;
@@ -148,11 +148,11 @@
 				let usedTime = endTime - startTime;
 				usedTime = usedTime / 60000;
 				if (usedTime <= 59) {
-					return usedTime + '分钟';
+					return Math.floor(usedTime) + '分钟';
 				} else if (usedTime <= 1440) {
-					return usedTime / 60 + '小时';
+					return Math.floor(usedTime / 60) + '小时';
 				} else {
-					return usedTime / 1440 + '天';
+					return Math.floor(usedTime / 1440) + '天';
 				}
 			},
 			signUp() {
