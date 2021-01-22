@@ -97,6 +97,9 @@
 				<br />
 				<text>32人</text>
 			</view>
+			<view class="flex-sub text-center">
+				<text class="text-lg">{{isSignedUp?"已报名":"未报名"}}</text>
+			</view>
 			<view class="flex-treble flex justify-end padding-lr">
 				<button class="bg-cyan cu-btn round lg">
 					<text class="padding-lr-xl" @click="checkSignUpState">{{isSignedUp ? "取消报名" : "我要报名"}}</text>
@@ -162,7 +165,7 @@
 								if (this.subLectures[i].ID == id) {
 									this.subLectures[i] = msg.data;
 									var time = new Date();
-									if (msg.data.isSignIn) {
+									if (msg.isSignIn) {
 										this.signInState = "已签到";
 									} else {
 										this.signInState = "未签到";
