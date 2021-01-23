@@ -17,7 +17,7 @@
 			<view class="cu-item">
 				<view class="content">
 					<text class="cuIcon-location line-brown"></text>
-					<text class="">某处</text>
+					<text class="">{{lecture.Address}}</text>
 				</view>
 			</view>
 			<view class="cu-item">
@@ -40,7 +40,7 @@
 				</view>
 			</view>
 			<view class="bg-white padding-lr padding-tb-xs" style="text-indent: 1em;">
-				123
+				{{lecture.Content ? lecture.Content : "暂无简介"}}
 			</view>
 		</view>
 		<view class="cu-list menu sm-border">
