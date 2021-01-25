@@ -15,18 +15,8 @@
 			</view>
 		</view>
 		<transition-group class="cu-list cu-card" name="list">
-			<view class="cu-item" v-for="lecture in SignUpEvents" :key="lecture.ID" @click="toDetail(lecture.ID)">
-				<view class="cu-avatar round lg" :style="`background-image:url(${app.webInfo.avatar});`"></view>
-				<view class="content">
-					<view class="text-black">{{lecture.Name}}</view>
-					<view class="text-gray text-sm flex">
-						<view class="text-cut">
-							{{lecture.BeginOn}} - {{lecture.EndOn}}<br />地点：{{lecture.Address}}
-						</view> </view>
-				</view>
-				<view class="action">
-					<view class="cu-tag round bg-grey sm">{{lecture.state}}</view>
-				</view>
+			<view class="cu-list menu-avatar" v-for="(item,index) in SignUpEvents" :key="index" v-show="displaySignUp">
+				<lectureEntry :lecture="item" />
 			</view>
 		</transition-group>
 		<template v-if="SignUpEvents.length===0 && displaySignUp">
@@ -46,21 +36,11 @@
 			</view>
 		</view>
 		<transition-group class="cu-list cu-card" name="list">
-			<view class="cu-item" v-for="lecture in SignInEvents" :key="lecture.ID" @click="toDetail(lecture.ID)">
-				<view class="cu-avatar round lg" :style="`background-image:url(${app.webInfo.avatar});`"></view>
-				<view class="content">
-					<view class="text-black">{{lecture.Name}}</view>
-					<view class="text-gray text-sm flex">
-						<view class="text-cut">
-							{{lecture.BeginOn}} - {{lecture.EndOn}}<br />地点：{{lecture.Address}}
-						</view> </view>
-				</view>
-				<view class="action">
-					<view class="cu-tag round bg-grey sm">{{lecture.state}}</view>
-				</view>
+			<view class="cu-list menu-avatar" v-for="(item,index) in SignInEvents" :key="index" v-show="displaySignIn">
+				<lectureEntry :lecture="item" />
 			</view>
 		</transition-group>
-		<template v-if="SignInEvents.length===0 && displaySignUp">
+		<template v-if="SignInEvents.length===0 && displaySignIn">
 			<view class="padding-tb text-center text-lg">
 				<text class="text-bold text-gray">暂无数据</text>
 			</view>
@@ -70,15 +50,23 @@
 
 <script>
 	let app = require("@/config");
+	import lectureEntry from './components/lectureEntry'
 	export default {
+		components: {lectureEntry},
 		onShow() {
+			// console.log(app);
+			this.SignUpEvents = [];
+			this.SignInEvents = [];
 			uni.post("/api/activity/MySignUp", {}, msg => {
 				if(msg.success) {
-					this.SignUpEvents = msg.data;
+					var SignUp = msg.data;
 					// console.log(msg.data);
-					for (var i = 0; i < this.SignUpEvents.length; i++) {
-						this.calcState(this.SignUpEvents[i]);
+					for (var i = 0; i < SignUp.length; i++) {
+						this.calcState(SignUp[i]);
+						// console.log(SignUp[i]);
+						this.SignUpEvents.push(SignUp[i]);
 					}
+					// console.log(this.SignUpEvents);
 				} else {
 					uni.showToast({
 						title: msg.msg,
@@ -88,11 +76,13 @@
 			});
 			uni.post("/api/activity/MySignIn", {}, msg => {
 				if(msg.success) {
-					this.SignUpEvents = msg.data;
+					var SignIn = msg.data;
 					// console.log(msg.data);
-					for (var i = 0; i < this.SignUpEvents.length; i++) {
-						this.calcState(this.SignUpEvents[i]);
+					for (var i = 0; i < SignIn.length; i++) {
+						this.calcState(SignIn[i]);
+						this.SignInEvents.push(SignIn[i]);
 					}
+					// console.log(this.SignInEvents);
 				} else {
 					uni.showToast({
 						title: msg.msg,
@@ -132,6 +122,9 @@
 			return {
 				displaySignUp: true,
 				displaySignIn: true,
+				app: {
+					...app
+				},
 				SignUpEvents: [],
 				SignInEvents: []
 			}
