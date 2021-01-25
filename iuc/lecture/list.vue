@@ -11,12 +11,12 @@
 					<view class="text-black">{{lecture.Name}}</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
-							{{lecture.BeginOn}} - {{lecture.EndOn}}
+							{{lecture.BeginOn}} - {{lecture.EndOn}}<br />地点：{{lecture.Address}}
 						</view> </view>
 				</view>
 				<view class="action">
 					<!-- <view class="text-grey text-xs">写啥呢</view> -->
-					<view class="cu-tag round bg-grey sm">未开始</view>
+					<view class="cu-tag round bg-grey sm">{{lecture.state}}</view>
 				</view>
 			</view>
 		</view>
@@ -41,6 +41,9 @@
 					if(msg.success) {
 						this.lectures = msg.data;
 						// console.log(msg.data);
+						for (var i = 0; i < this.lectures.length; i++) {
+							this.calcState(this.lectures[i]);
+						}
 					} else {
 						uni.showToast({
 							title: msg.msg,
@@ -53,6 +56,22 @@
 				uni.navigateTo({
 					url: `./detail?id=${id}`
 				});
+			},
+			calcState(data) {
+				var time = new Date();
+				if (time < new Date(data.SignUpBegin)) {
+					data.state = "未开始";
+				} else if (time > new Date(data.BeginOn) && time < new Date(data.EndOn)) {
+					data.state = "进行中";
+					// this.showSignInState = true;
+				} else if (time > new Date(data.EndOn)) {
+					data.state = "已结束";
+					// this.showSignInState = true;
+				} else if (time < new Date(data.SignUpEnd)) {
+					data.state = "报名中";
+				} else if (time > new Date(data.SignUpEnd) && time < new Date(data.BeginOn)) {
+					data.state = "准备中";
+				}
 			}
 		}
 	}
