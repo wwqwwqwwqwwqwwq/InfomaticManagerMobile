@@ -9,9 +9,6 @@
 				</view>
 			</view>
 		</view>
-		<view class="action">
-			<view class="cu-tag round bg-grey sm">{{lecture.state}}</view>
-		</view>
 	</view>
 </template>
 

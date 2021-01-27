@@ -15,7 +15,7 @@
 			</view>
 		</view>
 		<transition-group class="cu-list cu-card" name="list">
-			<view class="cu-list menu-avatar" v-for="(item,index) in SignUpEvents" :key="index" v-show="displaySignUp">
+			<view class="cu-list menu-avatar" style="margin-top: 0;" v-for="(item,index) in SignUpEvents" :key="index" v-show="displaySignUp">
 				<lectureEntry :lecture="item" />
 			</view>
 		</transition-group>
@@ -36,7 +36,8 @@
 			</view>
 		</view>
 		<transition-group class="cu-list cu-card" name="list">
-			<view class="cu-list menu-avatar" v-for="(item,index) in SignInEvents" :key="index" v-show="displaySignIn">
+			<view class="bg-white padding" key="SignIn" v-show="displaySignIn">本学期共签到{{signInTime}}次</view>
+			<view class="cu-list menu-avatar" style="margin-top: 0;" v-for="(item,index) in SignInEvents" :key="index" v-show="displaySignIn">
 				<lectureEntry :lecture="item" />
 			</view>
 		</transition-group>
@@ -62,7 +63,7 @@
 					var SignUp = msg.data;
 					// console.log(msg.data);
 					for (var i = 0; i < SignUp.length; i++) {
-						this.calcState(SignUp[i]);
+						// this.calcState(SignUp[i]);
 						// console.log(SignUp[i]);
 						this.SignUpEvents.push(SignUp[i]);
 					}
@@ -77,9 +78,10 @@
 			uni.post("/api/activity/MySignIn", {}, msg => {
 				if(msg.success) {
 					var SignIn = msg.data;
+					this.signInTime = msg.delay.signInTime;
 					// console.log(msg.data);
 					for (var i = 0; i < SignIn.length; i++) {
-						this.calcState(SignIn[i]);
+						// this.calcState(SignIn[i]);
 						this.SignInEvents.push(SignIn[i]);
 					}
 					// console.log(this.SignInEvents);
@@ -96,22 +98,6 @@
 			foldUp(e) {
 				this[e] = !this[e];
 			},
-			calcState(data) {
-				var time = new Date();
-				if (time < new Date(data.SignUpBegin)) {
-					data.state = "未开始";
-				} else if (time > new Date(data.BeginOn) && time < new Date(data.EndOn)) {
-					data.state = "进行中";
-					// this.showSignInState = true;
-				} else if (time > new Date(data.EndOn)) {
-					data.state = "已结束";
-					// this.showSignInState = true;
-				} else if (time < new Date(data.SignUpEnd)) {
-					data.state = "报名中";
-				} else if (time > new Date(data.SignUpEnd) && time < new Date(data.BeginOn)) {
-					data.state = "准备中";
-				}
-			},
 			toDetail(id){
 				uni.navigateTo({
 					url: `./detail?id=${id}`
@@ -126,7 +112,8 @@
 					...app
 				},
 				SignUpEvents: [],
-				SignInEvents: []
+				SignInEvents: [],
+				signInTime: 0
 			}
 		}
 	}
@@ -134,9 +121,10 @@
 
 <style>
 	.cu-list>.cu-item {
-		padding-top: 16rpx;
-		padding-bottom: 6rpx;
+		/* padding-top: 16rpx;
+		padding-bottom: 6rpx; */
 		transition: all 1s;
+		margin-top: 0;
 	}
 
 	.list-move {
