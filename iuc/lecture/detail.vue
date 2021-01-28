@@ -29,7 +29,7 @@
 			<view class="cu-item">
 				<view class="content">
 					<text class="cuIcon-edit line-orange"></text>
-					<text class="">其他属性</text>
+					<text class="">待完善. . .</text>
 				</view>
 			</view>
 			<view class="cu-item" v-if="totalMissed != 0">
@@ -48,17 +48,17 @@
 			<template v-for="subLecture in showingSubLectures">
 				<view class="cu-item" :key="subLecture.ID">
 					<view class="content">
-						<text v-if="!isSignedUp" class="cuIcon-btn text-green"></text>
-						<!-- <text v-if="isSignedUp && !(subLecture.isSignIn)" class="cuIcon-roundclosefill text-red"></text>
-						<text v-if="isSignedUp && subLecture.isSignIn" class="cuIcon-roundcheckfill text-green"></text> -->
 						<text v-if="isSignedUp" :class="subLecture.isSignIn?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'"></text>
+						<text v-else class="cuIcon-btn text-green"></text>
 						<text>{{subLecture.Name}}</text>
 					</view>
 					<view class="action">
 						<button class="cu-btn line-blue" @click="show(subLecture.ID)">
 							详情
 						</button>
-						<button class="cu-btn bg-blue lg margin-left margin-right" @click="toSignUp(subLecture.ID)">签到测试</button>
+						<button class="cu-btn line-green margin-lr" @click="toSignUp(subLecture.ID)">
+							签到
+						</button>
 					</view>
 				</view>
 				<view class="padding solid-top solid-bottom bg-white" v-show="showDetail === subLecture.ID">
@@ -92,20 +92,7 @@
 				<!-- {{lecture.Content ? lecture.Content : "暂无简介"}} -->
 			</view>
 		</view>
-		<!-- <view class="cu-list menu">
-			<view class="cu-item">
-				<view class="content">
-					<text class="text-lg">签到测试</text>
-				</view>
-			</view>
-			<button class="cu-btn bg-blue lg margin-left margin-right" @click="toSignUp">点击签到</button>
-		</view> -->
 		<view class="cu-bar foot bg-white">
-			<view class="flex-sub text-center" v-if="false">
-				<text class="text-lg">已报名</text>
-				<br />
-				<text>32人</text>
-			</view>
 			<view class="flex-sub text-center">
 				<text class="text-lg">{{isSignedUp?"已报名":"未报名"}}</text>
 			</view>
@@ -161,16 +148,16 @@
 			clearTimeout(this.timer1);
 			clearInterval(this.timer2);
 		},
-		watch:{
-		  $route: {
-		       handler:  function (val, oldVal){
-		         // console.log('leave');
-		         clearTimeout(this.timer1);
-		         clearInterval(this.timer2);
-		       },
-		       // 深度观察监听
-		       deep:  true
-		     }
+		watch: {
+			$route: {
+				handler: function(val, oldVal) {
+					// console.log('leave');
+					clearTimeout(this.timer1);
+					clearInterval(this.timer2);
+				},
+				// 深度观察监听
+				deep: true
+			}
 		},
 		methods: {
 			show(id) {
