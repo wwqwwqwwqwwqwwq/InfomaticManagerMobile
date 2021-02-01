@@ -294,7 +294,7 @@
 				}
 			},
 			checkSignUpState() {
-				var time = new Date();
+				let time = new Date();
 				if (time < new Date(this.lecture.SignUpBegin)) {
 					uni.showToast({
 						title: "报名未开始",
@@ -318,15 +318,15 @@
 			SignUp() {
 				clearInterval(this.timer2);
 				// console.log("SignUp");
-				var sta;
+				let state;
 				if (!this.isSignedUp) {
-					sta = 0;
+					state = 0;
 				} else {
-					sta = 999;
+					state = 999;
 				}
 				// console.log('state:' + sta);
 				uni.post("/api/activity/SignUp", {
-					state: sta,
+					state,
 					id: this.thisId
 				}, msg => {
 					this.signUpDisable = false;
@@ -334,14 +334,12 @@
 						this.getSubLectures(this.thisId);
 						if (!this.isSignedUp) {
 							uni.showToast({
-								title: "报名成功",
-								icon: "none"
+								title: "报名成功"
 							});
 							this.isSignedUp = true;
 						} else {
 							uni.showToast({
-								title: "取消报名成功",
-								icon: "none"
+								title: "取消报名成功"
 							});
 							this.isSignedUp = false;
 						}
@@ -354,8 +352,7 @@
 					}
 				});
 			},
-			countDown() {
-				// console.log('countDown');
+			countDown() {;
 				this.totalDelay--;
 				this.changeButton();
 			}
