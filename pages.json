@@ -76,8 +76,11 @@
 		{
 			"path":"iuc/userInfo/modifyEmail",
 			"style": {}
-		}
-		,
+		},
+		{
+			"path":"iuc/lecture/myLecture",
+			"style": {}
+		},
 		{
 			"path":"iuc/userInfo/modifyTel",
 			"style": {}
@@ -123,6 +126,15 @@
         }
         ,{
             "path" : "iuc/signIn/signIn",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "iuc/lecture/leaveApplication",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

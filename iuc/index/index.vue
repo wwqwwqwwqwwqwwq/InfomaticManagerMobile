@@ -146,12 +146,12 @@
 						image: "../../static/实验室申请.png",
 						text: "讲座列表",
 						source: "../lecture/list"
-					}// ,
-					// {
-					// 	image: "../../static/实验室申请.png",
-					// 	text: "签到(测试入口)",
-					// 	source: "../signUp/signUp"
-					// },
+					},
+					{
+						image: "../../static/实验室申请.png",
+						text: "我的活动",
+						source: "../lecture/myLecture"
+					} // ,
 					// {
 					// 	image: "../../static/实验室列表.png",
 					// 	text: "所有申请",
