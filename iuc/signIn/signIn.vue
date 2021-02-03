@@ -245,8 +245,8 @@
 	}
 
 	.container {
-		width: 375px;
-		min-height: 570px;
+		width: 100%;
+		/* min-height: 570px; */
 		max-height: 90vh;
 		position: absolute;
 		margin: auto;
@@ -306,6 +306,9 @@
 
 	.card-container .card-info .information {
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	.card-container .card-info::after {
@@ -391,9 +394,9 @@
 	.information .meeting-time-container {
 		width: 600rpx;
 		height: 53px;
-		margin: 25px 37.5rpx 30px 37.5rpx;
+		margin: 25px 0 30px 0;
 		/* margin-left: 3rpx;
-	margin-right: 75rpx; */
+		margin-right: 75rpx; */
 	}
 
 	.information .meeting-time-container .begin-time {
