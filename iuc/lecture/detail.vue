@@ -46,17 +46,14 @@
 				</view>
 			</view>
 			<block v-for="subLecture in subLectures" :key="subLecture.ID">
-				<view class="cu-item" >
+				<view class="cu-item logo" @click="show(subLecture.ID)">
 					<view class="content">
 						<text v-if="isSignedUp" :class="subLecture.isSignIn?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'"></text>
 						<text v-else class="cuIcon-btn text-green"></text>
 						<text>{{subLecture.Name}}</text>
 					</view>
 					<view class="action">
-						<button class="cu-btn line-blue" @click="show(subLecture.ID)">
-							详情
-						</button>
-						<button class="cu-btn line-green margin-lr" @click="toSignUp(subLecture.ID)">
+						<button v-if="false" class="cu-btn line-green margin-lr" @click="toSignUp(subLecture.ID)">
 							签到
 						</button>
 					</view>
@@ -142,7 +139,7 @@
 		},
 		methods: {
 			show(id) {
-				this.showDetail = this.showDetail ? "" : id;
+				this.showDetail = id === this.showDetail ? "" : id;
 			},
 			changeButton() {
 				if (this.isSignedUp) {
@@ -334,4 +331,10 @@
 </script>
 
 <style>
+	.logo {
+		background-image: url('../../static/角标-已签到.png');
+		background-repeat: no-repeat;
+		background-size: 15%;
+		background-position: 95% 50%;
+	}
 </style>
