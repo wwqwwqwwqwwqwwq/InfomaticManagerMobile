@@ -110,12 +110,19 @@
 				});
 			},
 			checkUserData() {
-				if (app.userInfo.isLogined == false) {
-					alert("请先登录");
-					uni.navigateTo({
-						url: `../profile/profile`
-					});
-				} else if (app.userInfo.email == '' || app.userInfo.mobile == '') {
+				// if (app.userInfo.isLogined == false) {
+				// 	alert("请先登录");
+				// 	uni.navigateTo({
+				// 		url: `../profile/profile`
+				// 	});
+				// } else if (app.userInfo.email == '' || app.userInfo.mobile == '') {
+				// 	alert("请填写您的手机号以及邮箱");
+				// 	uni.navigateTo({
+				// 		url: `../userInfo/userInfo`
+				// 	});
+				// }
+				
+				if (app.userInfo.email == '' || app.userInfo.mobile == '') {
 					alert("请填写您的手机号以及邮箱");
 					uni.navigateTo({
 						url: `../userInfo/userInfo`
