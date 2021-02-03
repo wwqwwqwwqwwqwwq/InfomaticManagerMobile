@@ -44,11 +44,11 @@
 					};
 					if (where == 'softwareInstall') {
 						uni.navigateTo({
-							url: "/iuc/" + where + "/v1/list"
+							url: "/iuc/" + "index/index"
 						})
 					} else if (where == 'roomApplication') {
 						uni.navigateBack({
-							
+							url: "/iuc/" + where + "index"
 						});
 					}
 				});

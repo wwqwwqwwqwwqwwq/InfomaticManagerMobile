@@ -29,7 +29,7 @@
 			<view class="cu-item">
 				<view class="content">
 					<text class="cuIcon-edit line-orange"></text>
-					<text class="">其他属性</text>
+					<text class="">待完善. . .</text>
 				</view>
 			</view>
 			<view class="cu-item" v-if="totalMissed != 0">
@@ -45,20 +45,17 @@
 					<text class="text-lg">子讲座列表</text>
 				</view>
 			</view>
-			<template v-for="subLecture in showingSubLectures">
-				<view class="cu-item" :key="subLecture.ID">
+			<block v-for="subLecture in subLectures" :key="subLecture.ID">
+				<view class="cu-item logo" @click="show(subLecture.ID)">
 					<view class="content">
-						<text v-if="!isSignedUp" class="cuIcon-btn text-green"></text>
-						<!-- <text v-if="isSignedUp && !(subLecture.isSignIn)" class="cuIcon-roundclosefill text-red"></text>
-						<text v-if="isSignedUp && subLecture.isSignIn" class="cuIcon-roundcheckfill text-green"></text> -->
 						<text v-if="isSignedUp" :class="subLecture.isSignIn?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'"></text>
+						<text v-else class="cuIcon-btn text-green"></text>
 						<text>{{subLecture.Name}}</text>
 					</view>
 					<view class="action">
-						<button class="cu-btn line-blue" @click="show(subLecture.ID)">
-							详情
+						<button v-if="false" class="cu-btn line-green margin-lr" @click="toSignUp(subLecture.ID)">
+							签到
 						</button>
-						<button class="cu-btn bg-blue lg margin-left margin-right" @click="toSignUp(subLecture.ID)">签到测试</button>
 					</view>
 				</view>
 				<view class="padding solid-top solid-bottom bg-white" v-show="showDetail === subLecture.ID">
@@ -80,7 +77,7 @@
 					<text class="cuIcon-timefill" v-if="showSignInState"></text>
 					<text v-if="showSignInState">签到情况：{{subLecture.signInState}}</text>
 				</view>
-			</template>
+			</block>
 		</view>
 		<view class="cu-list menu">
 			<view class="cu-item">
@@ -92,20 +89,7 @@
 				<!-- {{lecture.Content ? lecture.Content : "暂无简介"}} -->
 			</view>
 		</view>
-		<!-- <view class="cu-list menu">
-			<view class="cu-item">
-				<view class="content">
-					<text class="text-lg">签到测试</text>
-				</view>
-			</view>
-			<button class="cu-btn bg-blue lg margin-left margin-right" @click="toSignUp">点击签到</button>
-		</view> -->
 		<view class="cu-bar foot bg-white">
-			<view class="flex-sub text-center" v-if="false">
-				<text class="text-lg">已报名</text>
-				<br />
-				<text>32人</text>
-			</view>
 			<view class="flex-sub text-center">
 				<text class="text-lg">{{isSignedUp?"已报名":"未报名"}}</text>
 			</view>
@@ -128,81 +112,58 @@
 				lecture: {},
 				subLectures: [],
 				isSignedUp: false,
-				thisId: "",
+				lectureId: "",
 				state: "未知",
 				showSignInState: false,
 				signInState: "未知",
-				showingSubLectures: [],
 				totalDelay: 0,
 				totalMissed: 0,
 				btnText: "我要报名",
-				timer1: "",
-				timer2: "",
+				timer: -1,
+				leftTime: 0,
 				signUpDisable: false
 			}
 		},
 		onLoad(e) {
 			this.getSubLectures(e.id);
-			this.thisId = e.id;
-			// console.log(app);
+			this.lectureId = e.id;
 		},
 		onBackPress() {
-			// console.log('leave');
-			clearTimeout(this.timer1);
-			clearInterval(this.timer2);
+			clearInterval(this.timer);
 		},
-		// onHide() {
-		// 	console.log('leave');
-		// 	clearTimeout(this.timer1);
-		// 	clearInterval(this.timer2);
-		// },
+		onHide() {
+			clearInterval(this.timer);
+		},
 		onUnload() {
-			// console.log('leave');
-			clearTimeout(this.timer1);
-			clearInterval(this.timer2);
-		},
-		watch:{
-		  $route: {
-		       handler:  function (val, oldVal){
-		         // console.log('leave');
-		         clearTimeout(this.timer1);
-		         clearInterval(this.timer2);
-		       },
-		       // 深度观察监听
-		       deep:  true
-		     }
+			clearInterval(this.timer);
 		},
 		methods: {
 			show(id) {
-				if (this.showDetail) this.showDetail = "";
-				else this.showDetail = id;
+				this.showDetail = id === this.showDetail ? "" : id;
 			},
 			changeButton() {
 				if (this.isSignedUp) {
 					this.btnText = "取消报名";
 				} else {
-					if (this.totalDelay == 0) {
+					if (this.totalDelay === 0) {
 						this.btnText = "我要报名";
 					} else {
-						this.btnText = "我要报名(" + this.totalDelay + "s)";
+						this.btnText = "我要报名(罚时" + this.leftTime + "秒)";
 					}
 				}
 			},
 			getSubLectures(id) {
-				uni.post("/api/activity/GetUserActivityCategory", {
-					id
-				}, msg => {
+				uni.post("/api/activity/GetUserActivityCategory", {id}, msg => {
 					if (msg.success) {
 						this.lecture = msg.data;
 						this.subLectures = msg.activities;
 						this.isSignedUp = msg.isSignUp;
-						this.totalDelay = msg.delay.total;
+						this.leftTime = this.totalDelay = msg.delay.total;
 						this.totalMissed = msg.delay.miss.length;
 						this.changeButton();
 						this.calcState();
-						this.showingSubLectures = [];
-						for (var i = 0; i < this.subLectures.length; i++) {
-							this.getSubLectureDetail(this.subLectures[i].ID);
+						for (let subLecture of this.subLectures) {
+							this.getSubLectureDetail(subLecture.ID);
 						}
 						this.subLectures.reverse();
 						this.subLectures.reverse();
@@ -213,31 +174,18 @@
 						})
 					}
 				});
-				// uni.postStream("/api/activity/GetUserActivityCategory", {
-
-				// })
 			},
 			getSubLectureDetail(id) {
-				uni.post("/api/activity/GetUserActivity", {
-					id
-				}, msg => {
+				uni.post("/api/activity/GetUserActivity", {id}, msg => {
 					if (msg.success) {
-						for (var i = 0; i < this.subLectures.length; i++) {
-							if (this.subLectures[i].ID == id) {
+						for (let i = 0; i < this.subLectures.length; i++) {
+							if (this.subLectures[i].ID === id) {
 								this.subLectures[i] = msg.data;
-								var time = new Date();
 								if (msg.isSignIn) {
-									this.subLectures[i].signInState = "已签到";
-									// this.subLectures[i].isSignIn = true;
-									this.$set(this.subLectures[i], "isSignIn", true);
-									// console.log('true,' + this.subLectures[i].isSignIn);
+									this.$set(this.subLectures[i], "signInState", "已签到");
 								} else {
-									this.subLectures[i].signInState = "未签到";
-									// this.subLectures[i].isSignIn = false;
-									this.$set(this.subLectures[i], "isSignIn", false);
-									// console.log('false,' + this.subLectures[i].isSignIn);
+									this.$set(this.subLectures[i], "signInState", "未签到");
 								}
-								this.showingSubLectures.push(this.subLectures[i]);
 								break;
 							}
 						}
@@ -250,19 +198,20 @@
 				});
 			},
 			calcState() {
-				var time = new Date();
+				let time = new Date();
 				if (time < new Date(this.lecture.SignUpBegin)) {
 					this.state = "未开始";
-				} else if (time > new Date(this.lecture.BeginOn) && time < new Date(this.lecture.EndOn)) {
-					this.state = "进行中";
-					this.showSignInState = true;
-				} else if (time > new Date(this.lecture.EndOn)) {
-					this.state = "已结束";
-					this.showSignInState = true;
 				} else if (time < new Date(this.lecture.SignUpEnd)) {
 					this.state = "报名中";
 				} else if (time > new Date(this.lecture.SignUpEnd) && time < new Date(this.lecture.BeginOn)) {
 					this.state = "准备中";
+				}
+				if (time > new Date(this.lecture.BeginOn) && time < new Date(this.lecture.EndOn)) {
+					this.showSignInState = true;
+					this.state = "进行中";
+				} else if (time > new Date(this.lecture.EndOn)) {
+					this.showSignInState = true;
+					this.state = "已结束";
 				}
 			},
 			toDetail(id) {
@@ -270,27 +219,39 @@
 					url: `./detail?id=${id}`
 				});
 			},
-			toSignUp(id) {
-				if (app.userInfo.isLogined == false) {
-					alert("请先登录");
-					uni.navigateTo({
-						url: `../profile/profile`
+			toSignIn(id) {
+				if (!app.userInfo.isLogined) {
+					uni.showModal({
+						title: "用户未登录",
+						content: "请先登录。",
+						showCancel: false,
+						success: () => {
+							uni.navigateTo({
+								url: `../profile/profile`
+							});
+						}
 					});
-				} else if (app.userInfo.email == '' || app.userInfo.mobile == '') {
-					alert("请填写您的手机号以及邮箱");
-					uni.navigateTo({
-						url: `../userInfo/userInfo`
-					});
-				} else {
-					// console.log('开始跳转');
-					uni.navigateTo({
-						url: `../signIn/signIn?id=${id}`
-					});
+					return;
 				}
+				if (!app.userInfo.email || !app.userInfo.mobile) {
+					uni.showModal({
+						title: "补全信息",
+						content: "请填写您的手机号以及邮箱。",
+						showCancel: false,
+						success: () => {
+							uni.navigateTo({
+								url: `../userInfo/userInfo`
+							});
+						}
+					});
+					return;
+				}
+				uni.navigateTo({
+					url: `../signIn/signIn?id=${id}`
+				});
 			},
 			checkSignInState(id) {
-				// console.log('签到' + id);
-				var time = new Date();
+				let time = new Date();
 				if (time < new Date(this.lecture.BeginOn)) {
 					uni.showToast({
 						title: "签到未开始",
@@ -302,12 +263,11 @@
 						icon: "none"
 					});
 				} else {
-					// console.log('准备跳转');
-					this.toSignUp(id);
+					this.toSignIn(id);
 				}
 			},
 			checkSignUpState() {
-				var time = new Date();
+				let time = new Date();
 				if (time < new Date(this.lecture.SignUpBegin)) {
 					uni.showToast({
 						title: "报名未开始",
@@ -321,40 +281,39 @@
 				} else {
 					if (!this.isSignedUp) {
 						this.signUpDisable = true;
-						this.timer1 = setTimeout(this.SignUp, this.totalDelay * 1000);
-						this.timer2 = setInterval(this.countDown, 1000);
+						this.timer = setInterval(() => {
+							if (--this.leftTime < 0) {
+								clearInterval(this.timer);
+								this.SignUp(0);
+								this.leftTime = this.totalDelay;
+							} else {
+								this.changeButton();
+							}
+						}, 1000);
 					} else {
-						this.SignUp();
+						this.SignUp(999);
 					}
 				}
 			},
-			SignUp() {
-				clearInterval(this.timer2);
-				// console.log("SignUp");
-				var sta;
-				if (!this.isSignedUp) {
-					sta = 0;
-				} else {
-					sta = 999;
-				}
-				// console.log('state:' + sta);
+			/* 报名函数 */
+			SignUp(state) {
+				// 999 - 取消报名
+				// 0 - 报名
 				uni.post("/api/activity/SignUp", {
-					state: sta,
-					id: this.thisId
+					state,
+					id: this.lectureId
 				}, msg => {
 					this.signUpDisable = false;
 					if (msg.success) {
-						this.getSubLectures(this.thisId);
+						this.getSubLectures(this.lectureId);
 						if (!this.isSignedUp) {
 							uni.showToast({
-								title: "报名成功",
-								icon: "none"
+								title: "报名成功"
 							});
 							this.isSignedUp = true;
 						} else {
 							uni.showToast({
-								title: "取消报名成功",
-								icon: "none"
+								title: "取消报名成功"
 							});
 							this.isSignedUp = false;
 						}
@@ -366,15 +325,16 @@
 						})
 					}
 				});
-			},
-			countDown() {
-				// console.log('countDown');
-				this.totalDelay--;
-				this.changeButton();
 			}
 		}
 	}
 </script>
 
 <style>
+	.logo {
+		background-image: url('../../static/角标-已签到.png');
+		background-repeat: no-repeat;
+		background-size: 15%;
+		background-position: 95% 50%;
+	}
 </style>
