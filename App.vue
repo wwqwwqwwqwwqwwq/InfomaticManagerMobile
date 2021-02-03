@@ -11,7 +11,7 @@
 				// this.loginSuccess(app.userInfo.currentUserGuid);
 			} else {
 				uni.navigateTo({
-					url: "http://unify.xmu.edu.cn/r/RcR21D"
+					url: window.location.protocol + "//" + window.location.host + "/r/RcR21D"
 					// url: "uc/login/login"
 				})
 			}
