@@ -46,10 +46,9 @@
 				</view>
 			</view>
 			<block v-for="subLecture in subLectures" :key="subLecture.ID">
-				<view class="cu-item logo" @click="show(subLecture.ID)">
+				<view class="cu-item" :class="{logo: subLecture.State == '已签到'}" @click="show(subLecture.ID)">
 					<view class="content">
-						<text v-if="isSignedUp" :class="subLecture.isSignIn?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'"></text>
-						<text v-else class="cuIcon-btn text-green"></text>
+						<text class="cuIcon-btn text-green"></text>
 						<text>{{subLecture.Name}}</text>
 					</view>
 					<view class="action">
@@ -60,7 +59,7 @@
 				</view>
 				<view class="padding solid-top solid-bottom bg-white" v-show="showDetail === subLecture.ID">
 					<text class="cuIcon-info"></text>
-					<text>状态：{{subLecture.Status}}</text>
+					<text>状态：{{subLecture.State}}</text>
 					<br />
 					<text class="cuIcon-people"></text>
 					<text>汇报人：{{subLecture.Hoster}}</text>
@@ -73,9 +72,9 @@
 					<br />
 					<text class="cuIcon-timefill"></text>
 					<text>活动结束时间：{{subLecture.EndOn}}</text>
-					<br />
+					<!-- <br />
 					<text class="cuIcon-timefill" v-if="showSignInState"></text>
-					<text v-if="showSignInState">签到情况：{{subLecture.signInState}}</text>
+					<text v-if="showSignInState">签到情况：{{subLecture.signInState}}</text> -->
 				</view>
 			</block>
 		</view>
@@ -140,6 +139,9 @@
 		methods: {
 			show(id) {
 				this.showDetail = id === this.showDetail ? "" : id;
+				if (this.showDetail != "") {
+					// this.getSubLectureDetail(this.showDetail);
+				}
 			},
 			changeButton() {
 				if (this.isSignedUp) {
@@ -162,9 +164,6 @@
 						this.totalMissed = msg.delay.miss.length;
 						this.changeButton();
 						this.calcState();
-						for (let subLecture of this.subLectures) {
-							this.getSubLectureDetail(subLecture.ID);
-						}
 						this.subLectures.reverse();
 						this.subLectures.reverse();
 					} else {
