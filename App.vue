@@ -10,10 +10,11 @@
 				}
 				// this.loginSuccess(app.userInfo.currentUserGuid);
 			} else {
-				uni.navigateTo({
-					url: window.location.protocol + "//" + window.location.host + "/r/RcR21D"
-					// url: "uc/login/login"
-				})
+				window.location.href = window.location.protocol + "//" + window.location.host + "/r/RcR21D";
+				// uni.navigateTo({
+				// 	url: window.location.protocol + "//" + window.location.host + "/r/RcR21D"
+				// 	// url: "uc/login/login"
+				// })
 			}
 		},
 		onLaunch: function() {
