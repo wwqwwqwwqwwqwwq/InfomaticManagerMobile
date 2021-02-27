@@ -10,10 +10,13 @@
 				}
 				// this.loginSuccess(app.userInfo.currentUserGuid);
 			} else {
-				uni.navigateTo({
-					url: "http://unify.xmu.edu.cn/r/RcR21D"
-					// url: "uc/login/login"
-				})
+				if (process.env.NODE_ENV === "production") {
+					window.location.href = window.location.protocol + "//" + window.location.host + "/r/RcR21D";
+				} else {
+					uni.navigateTo({
+						url: "iuc/profile/profile"
+					})
+				}
 			}
 		},
 		onLaunch: function() {
