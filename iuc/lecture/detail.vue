@@ -14,7 +14,7 @@
 			</view>
 		</view>
 		<view class="cu-list menu sm-border" style="margin-top: 2rpx;">
-			<view class="cu-item">
+			<!-- <view class="cu-item">
 				<view class="content">
 					<text class="cuIcon-location line-brown"></text>
 					<text class="">{{lecture.Address}}</text>
@@ -30,6 +30,18 @@
 				<view class="content">
 					<text class="cuIcon-edit line-orange"></text>
 					<text class="">待完善. . .</text>
+				</view>
+			</view> -->
+			<view class="cu-item">
+				<view class="content">
+					<text class="cuIcon-time line-mauve"></text>
+					<text class="">报名开始:{{lecture.SignUpBegin}}</text>
+				</view>
+			</view>
+			<view class="cu-item">
+				<view class="content">
+					<text class="cuIcon-timefill line-orange"></text>
+					<text class="">报名结束:{{lecture.SignUpEnd}}</text>
 				</view>
 			</view>
 			<view class="cu-item" v-if="totalMissed != 0">
