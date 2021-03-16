@@ -12,8 +12,12 @@
 				</view>
 				<view class="basis-lg margin">
 					<view class="text-white">
-						<text class="text-xxl block margin-bottom-xs">{{userInfo.RealName}}</text>
-						<text>{{userInfo.Code}}</text>
+						<text class="text-xxl block margin-bottom-xs">
+							{{userInfo.RealName ? userInfo.RealName : "用户未登录"}}
+						</text>
+						<text>
+							{{userInfo.Code ? userInfo.Code : "请先登录"}}
+						</text>
 					</view>
 				</view>
 			</view>

@@ -116,8 +116,8 @@
 					},
 					{
 						image: "../../static/扫一扫.png",
-						text: "扫一扫",
-						source: "../alert/developing"
+						text: "我的团队",
+						source: "../teamMgt/MyTeam"
 					}
 				],
 				labList: [
