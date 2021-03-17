@@ -11,16 +11,17 @@
 			</block>
 		</cu-custom>
 		<view class="cu-list menu">
-			<view class="cu-item" @click="toDetail">
-				<view class="content padding-tb-sm">
+			<view class="cu-item" v-for="team in teams" :key="team.ID">
+				<view class="content padding-tb-sm" @click="toDetail(team.ID)">
 					<view>
-						<text class="cuIcon-group_fill text-blue margin-right-xs"></text> 团队名称
+						<text class="cuIcon-group_fill text-blue margin-right-xs"></text> {{team.Name}}
 					</view>
 					<view class="text-gray text-sm">
-						<text class="cuIcon-infofill margin-right-xs"></text> 团队详细信息
+						<text class="cuIcon-infofill margin-right-xs"></text>
+						负责人：{{team.LeaderName}}, 指导老师：{{team.TurtorName ? team.TurtorName : "暂无"}}
 					</view>
 				</view>
-				<view class="action">
+				<view class="action" @click="delTeam(team.ID)">
 					<button class="cu-btn bg-red">删除</button>
 				</view>
 			</view>
@@ -61,9 +62,9 @@
 			this.getTeams();
 		},
 		methods: {
-			toDetail() {
+			toDetail(ID) {
 				uni.navigateTo({
-					url: "./detail"
+					url: "./detail?id=" + ID
 				})
 			},
 			setModal() {
@@ -75,20 +76,49 @@
 					LeaderId: app.currentUserGuid
 				}, msg => {
 					if(msg.success) {
-						console.log(msg)
+						this.getTeams();
+						this.setModal();
+						this.teamName = '';
 					} else {
-						console.log(msg)
+						uni.showToast({
+							icon: 'none',
+							title: msg.msg
+						})
 					}
-				}) 
+				})
 			},
 			getTeams() {
 				uni.post("/api/team/GetTeams", {}, msg => {
 					if(msg.success) {
-						console.log(msg)
+						this.teams = msg.data;
 					} else {
-						console.log(msg)
+						uni.showToast({
+							icon: 'none',
+							title: msg.msg
+						})
 					}
-				}) 
+				})
+			},
+			delTeam(ID) {
+				uni.showModal({
+					title: "确认删除",
+					content: "是否删除此团队？删除后不可恢复。",
+					success: (res) => {
+						debugger
+						if(res.confirm){
+							uni.post("/api/team/RemoveTeam", {ID}, msg => {
+								if(msg.success) {
+									this.getTeams();
+								} else {
+									uni.showToast({
+										icon: 'none',
+										title: msg.msg
+									})
+								}
+							}) 
+						}
+					}
+				})
 			}
 		}
 	}

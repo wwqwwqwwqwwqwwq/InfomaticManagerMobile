@@ -126,6 +126,14 @@
 			"style": {}
 		},
 		{
+			"path": "iuc/teamMgt/invite",
+			"style": {}
+		},
+		{
+			"path": "iuc/teamMgt/approval",
+			"style": {}
+		},
+		{
 			"path": "iuc/signIn/signIn",
 			"style": {
 				"navigationBarTitleText": "",

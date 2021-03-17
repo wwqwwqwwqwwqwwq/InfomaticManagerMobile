@@ -14,11 +14,11 @@
 			<form>
 				<view class="cu-form-group">
 					<view class="title">团队名称</view>
-					<input placeholder="三字标题" name="input"></input>
+					<input placeholder="三字标题" name="input" v-model="team.Name"></input>
 				</view>
 				<view class="cu-form-group">
 					<view class="title">团队编号</view>
-					<input placeholder="三字标题" name="input"></input>
+					<input placeholder="三字标题" name="input" v-model="team.ID"></input>
 				</view>
 				<view class="cu-form-group">
 					<view class="title">项目名称</view>
@@ -32,7 +32,7 @@
 					<!-- last-child选择器-->
 				</view>
 				<view class="margin-right">
-					<button class="cu-btn bg-gradual-green">添加队员</button>
+					<button class="cu-btn bg-gradual-green" @click="toInvite">添加队员</button>
 				</view>
 			</view>
 			<view class="cu-list menu">
@@ -56,6 +56,7 @@
 				</view>
 			</view>
 		</view>
+		<navigator url="./approval" open-type="navigate">123</navigator>
 		<view class="cu-modal" :class="showModal ? 'show' : ''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-between">
@@ -109,14 +110,50 @@
 
 <script>
 	export default {
+		onLoad(opt) {
+			this.getTeam(opt.id);
+		},
 		data() {
 			return {
+				team: {
+					members: []
+				},
 				showModal: false
 			}
 		},
 		methods: {
 			showMember() {
 				this.showModal = !this.showModal
+			},
+			getTeam(ID) {
+				uni.post("/api/team/GetTeam", {ID}, msg => {
+					if(msg.success) {
+						this.team = msg.data;
+						this.getMembers(this.team.ID);
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: msg.msg
+						})
+					}
+				})
+			},
+			toInvite() {
+				uni.navigateTo({
+					url: './invite'
+				})
+			},
+			getMembers(teamId) {
+				uni.post("/api/team/GetTeamMembers", {teamId}, msg => {
+					if(msg.success) {
+						this.team.members = msg.data;
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: msg.msg
+						})
+					}
+				}) 
 			}
 		}
 	}
